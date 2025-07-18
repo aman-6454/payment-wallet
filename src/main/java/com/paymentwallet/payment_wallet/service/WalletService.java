@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import com.paymentwallet.payment_wallet.dao.CurrencyRepository;
 import com.paymentwallet.payment_wallet.dao.TransactionRepository;
@@ -35,8 +36,11 @@ public class WalletService {
     @Autowired
     private CurrencyRepository currencyRepository;
 
-    public User createAccount(UserDTO userDTO){
+    private static final Logger log = Logger.getLogger(WalletService.class.getName());
 
+
+    public User createAccount(UserDTO userDTO){
+        log.info("Create Account with user details: "+userDTO);
         User user = new User();
         user.setUsername(userDTO.getUsername());
         user.setPassword(userDTO.getPassword());
@@ -58,6 +62,7 @@ public class WalletService {
         wallet.setUser(user);
         user.setWallet(wallet);
 
+        log.info("User Created Successfully !");
         return userRepository.save(user);
 
     }
