@@ -5,8 +5,6 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Logger;
-
 import com.paymentwallet.payment_wallet.dao.CurrencyRepository;
 import com.paymentwallet.payment_wallet.dao.TransactionRepository;
 import com.paymentwallet.payment_wallet.dao.UserRepository;
@@ -14,12 +12,14 @@ import com.paymentwallet.payment_wallet.dao.WalletRepository;
 import com.paymentwallet.payment_wallet.exception.EmailException;
 import com.paymentwallet.payment_wallet.exception.InsufficientBalanceException;
 import com.paymentwallet.payment_wallet.model.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 
 @Service
+@Slf4j
 public class WalletService {
 
     public static final Integer CURRENCY_ID = 1;
@@ -36,11 +36,9 @@ public class WalletService {
     @Autowired
     private CurrencyRepository currencyRepository;
 
-    private static final Logger log = Logger.getLogger(WalletService.class.getName());
-
 
     public User createAccount(UserDTO userDTO){
-        log.info("Create Account with user details: "+userDTO);
+        log.info("Create Account with user details: {}", userDTO);
         User user = new User();
         user.setUsername(userDTO.getUsername());
         user.setPassword(userDTO.getPassword());
