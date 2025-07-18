@@ -14,6 +14,7 @@ import com.paymentwallet.payment_wallet.dao.TransactionRepository;
 import com.paymentwallet.payment_wallet.dao.UserRepository;
 import com.paymentwallet.payment_wallet.dao.WalletRepository;
 import com.paymentwallet.payment_wallet.exception.EmailException;
+import com.paymentwallet.payment_wallet.exception.InsufficientBalanceException;
 import com.paymentwallet.payment_wallet.model.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -148,4 +149,30 @@ class WalletServiceTest {
         verify(walletRepository).save(sender);
         verify(walletRepository).save(receiver);
     }
+
+    @Test
+    void testTransferFunds_ThrowsInsufficientBalanceException() {
+        // Arrange
+        TransferDTO transferDTO = new TransferDTO();
+        transferDTO.setSenderWalletId(1);
+        transferDTO.setReceiverWalletId(2);
+        transferDTO.setAmount(100.0);
+
+        Wallet senderWallet = new Wallet();
+        senderWallet.setWalletId(1);
+        senderWallet.setBalance(50.0); // Less than transfer amount
+
+        Wallet receiverWallet = new Wallet();
+        receiverWallet.setWalletId(2);
+        receiverWallet.setBalance(200.0);
+
+        when(walletRepository.findById(1)).thenReturn(Optional.of(senderWallet));
+        when(walletRepository.findById(2)).thenReturn(Optional.of(receiverWallet));
+
+        // Act & Assert
+        assertThrows(InsufficientBalanceException.class, () -> {
+            walletService.transferFunds(transferDTO);
+        });
+    }
+
 }

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 public class WalletService {
 
     public static final Integer CURRENCY_ID = 1;
+
     @Autowired
     private UserRepository userRepository;
 
