@@ -24,8 +24,12 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/v1/users")
 public class WalletController {
 
-    @Autowired
-    private WalletService walletService;
+
+    private final WalletService walletService;
+
+    public WalletController(WalletService walletService){
+        this.walletService=walletService;
+    }
 
     SecureRandom random = new SecureRandom();
 
